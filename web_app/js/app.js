@@ -20,7 +20,7 @@ const user = {
   lastName: 'Perez'
 };
 
-const element = (
+const element1 = (
   <h1>
     Hello, {formatName(user)}!
   </h1>
