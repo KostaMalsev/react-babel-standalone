@@ -32,12 +32,6 @@ class RootComponent extends React.Component {
             }}
         />;
     }
-    
-    
-    
-    
-    
-  );
 
 }
 
