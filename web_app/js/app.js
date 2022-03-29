@@ -8,32 +8,7 @@ const CounterComponent = ({ onIncrement, onDecrement, value }) => (
     </div>
 );
 
-class RootComponent extends React.Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            value: 0
-        };
-    }
-
-    render() {
-        return <CounterComponent
-            value={this.state.value}
-            onIncrement={() => {
-                this.setState({
-                    value: this.state.value + 1
-                });
-            }}
-            onDecrement={() => {
-                this.setState({
-                    value: this.state.value - 1
-                });
-            }}
-        />;
-    }
-
-}
 
 //Adding JSX components:
 function formatName(user) {
@@ -52,7 +27,37 @@ const element = (
 );
 
 
-ReactDOM.render(element,
+class RootComponent extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: 0
+        };
+    }
+
+    render(element) {
+        return <CounterComponent
+            value={this.state.value}
+            onIncrement={() => {
+                this.setState({
+                    value: this.state.value + 1
+                });
+            }}
+            onDecrement={() => {
+                this.setState({
+                    value: this.state.value - 1
+                });
+            }}
+        />;
+    }
+
+}
+
+
+
+
+ReactDOM.render(
     <RootComponent />,
     document.getElementById('root')
 );
