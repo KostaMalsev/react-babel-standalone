@@ -35,6 +35,7 @@ class RootComponent extends React.Component {
 
 }
 
+//Adding JSX components:
 function formatName(user) {
   return user.firstName + ' ' + user.lastName;
 }
@@ -51,7 +52,7 @@ const element = (
 );
 
 
-ReactDOM.render(
+ReactDOM.render(element,
     <RootComponent />,
     document.getElementById('root')
 );
