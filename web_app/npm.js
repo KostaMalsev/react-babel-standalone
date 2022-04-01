@@ -2,11 +2,13 @@
 let packageObj = {};
 
 async function npm(packageJSON) {
-    
+  
+  resultEl.textContent += 'Loaded package.json\n' + JSON.stringify(packageJSON) + '\n\n';
+  
   await getPackages(packageJSON.dependencies, packageObj);
   
-  return packageObj;
-  
+  return;
+    
 }
 
 async function getPackages(packageNames, packageObj) {
@@ -15,78 +17,24 @@ async function getPackages(packageNames, packageObj) {
     
     await asyncForEach(packageNames, async (packageName) => {
       
-      if (!packageObj[packageName]) {
+      if (!packageObj[packageName]) {        
         
         const package = await getPackage(packageName, 'latest');
         
-        //console.log('got', packageName, package);
+        const mainScript = await getMainPackageFile(packageName,
+                                                    package.version);
         
-        //console.log('fetching', packageName, package);
-        
-        let mainScript = '';
-        
-        if (package.types) {
-          
-          console.log('found types in', packageName);
-          
-        } else if (package.exports) {
-          
-          console.log('found', Object.keys(package.exports).length, 'exports in', packageName);
-          
-        } else if (package.files) {
-                  
-          if (package.files.length > 1
-              && package.files.includes('index.js')) {
-            
-            mainScript = 'index.js';
-            
-          } else {
-            
-            package.files.forEach(file => {
-              
-              if (file.endsWith('.js')) mainScript = file;
-              
-            });
-            
-          }
-          
-          //console.log('found main script "'+ mainScript +'" in files of', packageName);
-          
-        } else if (package.main) {
-          
-          //console.log('found main script "' + package.main + '" in', packageName);
-          
-          mainScript = package.main;
-          
-        } else {
-          
-          //console.log('assuming main script "index.js" for', packageName);
-          
-          mainScript = 'index.js';
-          
-        }
-        
-        if (mainScript) {
-        
-          mainScript = await getPackageFile(mainScript,
-                                            packageName,
-                                            package.version);
-          
-          if (package.dependencies) {
-            
-            //console.log('got', packageName, 'getting', Object.keys(package.dependencies).length, 'dependencies');
-        
-            getPackages(package.dependencies, packageObj);
-            
-          }
-          
-        } else {
-          
-          mainScript = package;
-          
+        if (package.dependencies) {
+                
+          getPackages(package.dependencies, packageObj);
+    
         }
         
         packageObj[packageName] = mainScript;
+
+
+        resultEl.textContent += 'Fetched ' + packageName + '\n';
+        document.body.scrollTo(0, document.body.scrollHeight);
         
       }
         
@@ -98,7 +46,7 @@ async function getPackages(packageNames, packageObj) {
 
 async function getPackage(packageName, version) {
   
-  let resp = await axios.get(cors + 'https://registry.npmjs.org/' + packageName);
+  let resp = await axios.get('https://registry.npmjs.cf/' + packageName);
   
   if (version === 'latest') return resp.versions[resp['dist-tags'].latest];
   
@@ -106,11 +54,10 @@ async function getPackage(packageName, version) {
   
 }
 
-async function getPackageFile(fileName, packageName, version) {
+async function getMainPackageFile(packageName, version) {
   
-  const resp = await axios.get('https://unpkg.com/' +
-                               packageName + (version ? ('@' + version) : '') +
-                               '/' + fileName, true);
+  const resp = await axios.get('https://cdn.skypack.dev/' +
+                               packageName + '@' + version, true);
   
   return resp;
   
@@ -118,12 +65,16 @@ async function getPackageFile(fileName, packageName, version) {
 
 
 async function asyncForEach(obj, callback) {
-  for (let index = 0; index < Object.keys(obj).length; index++) {
-    await callback(Object.keys(obj)[index], index, obj);
+  
+  const keys = Object.keys(obj);
+  
+  for (let index = 0; index < keys.length; index++) {
+    
+    await callback(keys[index], index, obj);
+    
   }
+  
 }
-
-const cors = 'https://scepter-cors2.herokuapp.com/';
 
 let axios = {
   'get': (url, noparse) => {
@@ -166,4 +117,35 @@ let axios = {
     });
   }
 };
+
+
+function getAllScriptsInObj(obj) {
+
+  let result = [];
+
+  goDeeper(obj);
+
+  function goDeeper(obj) {
+
+    for (var key in obj) {
+
+      if (obj[key].constructor.name === 'Object') {
+
+        goDeeper(obj[key]);
+
+      } else if (obj[key]
+                 && typeof(obj[key]) === 'string'
+                 && obj[key].endsWith('.js')) {
+
+        result.push(obj[key]);
+
+      }
+
+    }
+
+  }
+  
+  return result;
+
+}
 
