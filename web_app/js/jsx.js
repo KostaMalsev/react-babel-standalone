@@ -1,3 +1,5 @@
+console.log(React)
+
 function formatName(user) {
   return user.firstName + ' ' + user.lastName;
 }
