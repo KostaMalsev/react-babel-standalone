@@ -1,5 +1,4 @@
-console.log('here')
-console.log(React)
+
 
 function formatName(user) {
   return user.firstName + ' ' + user.lastName;
@@ -15,6 +14,9 @@ const element = (
     Hello, {formatName(user)}!
   </h1>
 );
+
+console.log('here')
+console.log(React)
 
 ReactDOM.render(
   element,
