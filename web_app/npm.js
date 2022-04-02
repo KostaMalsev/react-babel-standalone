@@ -29,8 +29,15 @@ async function getPackagesSky(packageNames, packageObj) {
         
         //packageObj[packageName] = mainScript;
         
-        await import ('https://cdn.skypack.dev/' + packageName);
+        //await import ('https://cdn.skypack.dev/' + packageName);
 
+        import('https://cdn.skypack.dev/' + packageName)
+          .then(module => {
+            module.loadPageInto(main);
+          })
+          .catch(err => {
+            main.textContent = err.message;
+          });
 
         resultEl.textContent += 'Fetched ' + packageName + '\n';
         document.body.scrollTo(0, document.body.scrollHeight);
