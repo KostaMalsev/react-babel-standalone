@@ -25,7 +25,7 @@ async function getPackagesSky(packageNames, packageObj) {
         //const package = await getPackage(packageName, 'latest');
         
         //const mainScript = await getMainPackageFile(packageName,
-                                                    package.version);
+                                                    //package.version);
         
         //packageObj[packageName] = mainScript;
         
