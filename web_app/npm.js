@@ -5,7 +5,9 @@ async function npm(packageJSON) {
   
   resultEl.textContent += 'Loaded package.json\n' + JSON.stringify(packageJSON) + '\n\n';
   
-  await getPackages(packageJSON.dependencies, packageObj);
+  //await getPackages(packageJSON.dependencies, packageObj);
+  await getPackagesSky(packageJSON.dependencies, packageObj);//using the skypack cdn API
+ 
   
   return;
     
