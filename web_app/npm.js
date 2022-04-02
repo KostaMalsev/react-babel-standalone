@@ -33,7 +33,7 @@ async function getPackagesSky(packageNames, packageObj) {
 
         import('https://cdn.skypack.dev/' + packageName)
           .then(module => {
-            module.loadPageInto(resultEl);
+            module.loadPageInto(main);
           })
           .catch(err => {
             //main.textContent = err.message;
