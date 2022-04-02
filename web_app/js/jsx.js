@@ -1,3 +1,4 @@
+console.log('here')
 console.log(React)
 
 function formatName(user) {
