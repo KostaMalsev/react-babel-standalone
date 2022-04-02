@@ -29,7 +29,7 @@ async function getPackagesSky(packageNames, packageObj) {
         
         //packageObj[packageName] = mainScript;
         
-        import 'https://cdn.skypack.dev/' + packageName;
+        await import ('https://cdn.skypack.dev/' + packageName);
 
 
         resultEl.textContent += 'Fetched ' + packageName + '\n';
