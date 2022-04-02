@@ -11,6 +11,40 @@ async function npm(packageJSON) {
     
 }
 
+//get Packages using Skypack cdn api:
+async function getPackagesSky(packageNames, packageObj) {
+  
+  if (packageNames && Object.keys(packageNames).length > 0) {
+    
+    await asyncForEach(packageNames, async (packageName) => {
+      
+      if (!packageObj[packageName]) {        
+        
+        const package = await getPackage(packageName, 'latest');
+        
+        const mainScript = await getMainPackageFile(packageName,
+                                                    package.version);
+        
+        packageObj[packageName] = mainScript;
+
+
+        resultEl.textContent += 'Fetched ' + packageName + '\n';
+        document.body.scrollTo(0, document.body.scrollHeight);
+        
+      }
+        
+    });
+    
+  }
+  
+}
+
+
+
+
+
+
+
 async function getPackages(packageNames, packageObj) {
   
   if (packageNames && Object.keys(packageNames).length > 0) {
