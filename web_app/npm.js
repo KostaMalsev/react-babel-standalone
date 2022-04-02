@@ -20,12 +20,14 @@ async function getPackagesSky(packageNames, packageObj) {
       
       if (!packageObj[packageName]) {        
         
-        const package = await getPackage(packageName, 'latest');
+        //const package = await getPackage(packageName, 'latest');
         
-        const mainScript = await getMainPackageFile(packageName,
+        //const mainScript = await getMainPackageFile(packageName,
                                                     package.version);
         
-        packageObj[packageName] = mainScript;
+        //packageObj[packageName] = mainScript;
+        
+        import React from 'https://cdn.skypack.dev/' + packageName;
 
 
         resultEl.textContent += 'Fetched ' + packageName + '\n';
